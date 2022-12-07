@@ -27,3 +27,8 @@
 # 主要技术栈
 
 ​	SpringBoot、Nacos、OpenFeign、Seata、Redis
+
+- 使用Nacos作为服务注册中心，负责分布式项目中服务注册与发现功能。
+- 使用OpenFeign实现不同服务模块之间的调用和负载均衡。
+- 使用Seata来确保分布式下多数据库操作的原子性和一致性。
+- 使用Redis保存热点数据，降低数据库的压力。
