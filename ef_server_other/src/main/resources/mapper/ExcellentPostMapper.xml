@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjs.examfrog.other.mapper.ExcellentPostMapper">
+    <sql id="selectSql">
+        select * from excellent_post
+    </sql>
+    <select id="listExcellentByManage" resultType="ExcellentPost">
+        <include refid="selectSql"/>
+    </select>
+
+    <select id="getOneByManage" resultType="ExcellentPost">
+        <include refid="selectSql"/> where id = #{id}
+    </select>
+
+    <update id="updateStatus" >
+        update excellent_post set post_id = #{postId},is_examine = #{isExamine}
+                                ,gmt_modified = #{gmtModified},is_delete = #{isDelete},version = #{version}
+        where id = #{id}
+    </update>
+
+    <select id="getOneByPostId" resultType="ExcellentPost">
+        <include refid="selectSql"/> where post_id = #{postId}
+    </select>
+
+    <select id="searchExcellentPost" resultType="UserPost">
+        select u.id,u.title,u.author_id,u.author_nick_name,u.author_avatar_url,u.category_id,u.view_count,u.comment_count,u.share_count,
+               u.content,u.title_image_url,u.gmt_modified,u.gmt_create,u.zone_id,u.completed,u.is_delete,u.trying_count,u.success_count,
+               u.tags
+        from excellent_post e
+        left join user_post u
+        on e.post_id = u.id
+        <where>
+            <if test="post.title != null">
+                and u.title like "%" #{post.title} "%"
+            </if>
+            <if test="post.date != null">
+                and u.gmt_create like #{post.date} "%"
+            </if>
+            <if test="post.userName != null">
+                and u.author_nick_name like "%" #{post.userName} "%"
+            </if>
+            <if test="post.status == 0">
+                and e.is_delete = 1
+            </if>
+            <if test="post.status == 1">
+                and e.is_delete = 0
+            </if>
+            <if test="post.status == 2">
+                and u.completed = 0
+            </if>
+            <if test="post.category != null">
+                and u.category_id = #{post.category}
+            </if>
+            <if test="post.orderType == 0">
+                order by u.view_count desc
+            </if>
+            <if test="post.orderType == 1">
+                order by u.view_count asc
+            </if>
+            <if test="post.orderType == 2">
+                order by u.gmt_create desc
+            </if>
+            <if test="post.orderType == 3">
+                order by u.gmt_create asc
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjs.examfrog.other.mapper.CategoryMapper">
+    <update id="onlineCategory" >
+        update category set is_delete = 0 where id = #{id}
+    </update>
+
+    <update id="editCategory" >
+        update category set name = #{name} where id = #{id}
+    </update>
+
+    <select id="getOneByManage" resultType="Category" >
+        select * from category where id = #{categoryId} and area_id = #{areaId}
+    </select>
+
+    <select id="searchForManage" resultType="Category">
+        select * from category
+        <where>
+            <if test="areaId != null">
+                area_id = #{areaId}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="categoryId != null">
+                and id = #{categoryId}
+            </if>
+            <if test="status == 1">
+                and is_delete = 0
+            </if>
+            <if test="status == 2">
+                and is_delete = 1
+            </if>
+        </where>
+    </select>
+
+    <select id="countMaxPosition" resultType="Long" >
+        select max(position) from category where is_delete = 0 and area_id = #{areaId}
+    </select>
+
+    <update id="updatePosition" >
+        update category set position = #{new} where position = #{position} and area_id = #{areaId}
+    </update>
+
+    <select id="listForManage" resultType="Category">
+        select * from category
+    </select>
+
+    <update id="removeCategory" >
+        update category set is_delete = 1,position = #{position} where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjs.examfrog.user.mapper.PlanningFolderMapper">
+
+    <select id="selectDeletedPlanningFolders" parameterType="Long" resultType="PlanningFolder">
+        SELECT DISTINCT *
+        FROM planning_folder
+        WHERE user_id = #{userId}
+          AND is_delete = 1
+    </select>
+
+    <update id="recoveryDeletedPlanningFolders">
+        UPDATE user_post_set
+        SET is_delete = 0
+        WHERE user_id = #{userId}
+        AND is_delete = 1
+        <if test="planningFolderIdList != null and planningFolderIdList.size() > 0">
+            AND id IN
+            <foreach collection="planningFolderIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteDeletedPlanningFolders">
+        DELETE FROM user_post_set
+        WHERE user_id = #{userId}
+        AND is_delete = 1
+        <if test="planningFolderIdList != null and planningFolderIdList.size() > 0">
+            AND id IN
+            <foreach collection="planningFolderIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+
+    <delete id="deleteAllDeletedPlanningFolders">
+        DELETE FROM user_post_set
+        WHERE user_id = #{userId}
+          AND is_delete = 1
+    </delete>
+
+</mapper>

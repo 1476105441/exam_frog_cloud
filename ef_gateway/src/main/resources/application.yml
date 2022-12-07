@@ -1,0 +1,48 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: ef_gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: user_routh1
+          uri: lb://ef-server-user
+          predicates:
+            - Path=/user/**
+
+        - id: user_routh2
+          uri: lb://ef-server-user
+          predicates:
+            - Path=/favPost/**
+
+        - id: user_routh3
+          uri: lb://ef-server-user
+          predicates:
+            - Path=/account/**
+
+        - id: other_routh1
+          uri: lb://ef-server-other
+          predicates:
+            - Path=/area/**
+
+        - id: other_routh2
+          uri: lb://ef-server-other
+          predicates:
+            - Path=/category/**
+
+        - id: other_routh3
+          uri: lb://ef-server-other
+          predicates:
+            - Path=/userPost/**
+
+
+# 自定义 jwt 配置
+jwt:
+  tokenHeader: Authorization  # JWT存储的请求头
+  tokenHead:
+  secret: exam-frog-secret    # JWT加解密使用的密钥
+  expiration: 604800          # JWT的超期限时间(默认 60*60*24*7 = 7天)

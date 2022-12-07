@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wjs.examfrog.other.mapper.SubtaskMapper">
+
+    <select id="selectDeletedSubtasksSubtaskIdListByPlanningIdList" resultType="Long">
+        SELECT id
+        FROM subtask
+        WHERE is_delete = 1
+        <if test="planningIdList != null and planningIdList.size() > 0">
+            AND planning_id IN
+            <foreach collection="planningIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="recoveryDeletedSubtasksByPlanningIdList">
+        UPDATE subtask
+        SET is_delete = 0
+        WHERE is_delete = 1
+        <if test="planningIdList != null and planningIdList.size() > 0">
+            AND planning_id IN
+            <foreach collection="planningIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteDeletedSubtasksByPlanningIdList">
+        DELETE FROM subtask
+        WHERE is_delete = 1
+        <if test="planningIdList != null and planningIdList.size() > 0">
+            AND planning_id IN
+            <foreach collection="planningIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="selectDeletedSubtasksSubtaskIdListByUserPostIdList" resultType="Long">
+        SELECT id
+        FROM subtask
+        WHERE is_delete = 1
+        <if test="userPostIdList != null and userPostIdList.size() > 0">
+            AND user_post_id IN
+            <foreach collection="userPostIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="recoveryDeletedSubtasksByUserPostIdList">
+        UPDATE subtask
+        SET is_delete = 0
+        WHERE is_delete = 1
+        <if test="userPostIdList != null and userPostIdList.size() > 0">
+            AND user_post_id IN
+            <foreach collection="userPostIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+
+    <delete id="deleteDeletedSubtasksByUserPostIdList">
+        DELETE FROM subtask
+        WHERE is_delete = 1
+        <if test="userPostIdList != null and userPostIdList.size() > 0">
+            AND user_post_id IN
+            <foreach collection="userPostIdList" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+
+</mapper>
